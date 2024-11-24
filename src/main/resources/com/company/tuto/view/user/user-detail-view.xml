@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://UserDetailView.title"
+      focusComponent="form">
+    <data>
+        <instance id="userDc"
+                  class="com.company.tuto.entity.User">
+            <fetchPlan extends="_base">
+                <property name="department" fetchPlan="_base"/>
+                <property name="steps" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader/>
+            <collection id="stepsDc" property="steps"/>
+        </instance>
+        <collection id="departmentsDc" class="com.company.tuto.entity.Department">
+            <loader id="departmentsDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from UU1_Department e order by e.name asc]]>
+                </query>
+            </loader>
+            <fetchPlan extends="_base"/>
+        </collection>
+    </data>
+    <actions>
+        <action id="saveAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <layout>
+        <formLayout id="form" dataContainer="userDc">
+            <textField id="usernameField" property="username" readOnly="true"/>
+            <passwordField id="passwordField"
+                           label="msg://com.company.tuto.entity/User.password"
+                           required="true"
+                           visible="false"/>
+            <passwordField id="confirmPasswordField"
+                           label="msg://confirmPassword"
+                           required="true"
+                           visible="false"/>
+            <textField id="firstNameField" property="firstName"/>
+            <textField id="lastNameField" property="lastName"/>
+            <textField id="emailField" property="email"/>
+            <comboBox id="timeZoneField" property="timeZoneId" clearButtonVisible="true"/>
+            <checkbox id="activeField" property="active"/>
+            <select id="onboardingStatusField" property="onboardingStatus"/>
+            <!-- <entityPicker id="departmentField" property="department">
+                 <actions>
+                     <action id="entityLookup" type="entity_lookup"/>
+                     <action id="entityClear" type="entity_clear"/>
+                 </actions>
+             </entityPicker>-->
+            <entityComboBox id="departmentField" property="department" itemsContainer="departmentsDc"/>
+            <datePicker id="joiningDateField" property="joiningDate"/>
+        </formLayout>
+       <!-- <hbox id="buttonsPanel" classNames="buttons-panel">
+            <button action="stepsDataGrid.create"/>
+            <button action="stepsDataGrid.edit"/>
+            <button action="stepsDataGrid.remove"/>
+        </hbox>-->
+
+        <!--<dataGrid id="stepsDataGrid" dataContainer="stepsDc" width="100%" height="100%">
+            <actions>
+                <action id="create" type="list_create"/>
+                <action id="edit" type="list_edit"/>
+                <action id="remove" type="list_remove"/>
+            </actions>
+            <columns>
+                <column property="dueDate"/>
+                <column property="completedDate"/>
+                <column property="sortValue"/>
+                <column property="version"/>
+            </columns>
+        </dataGrid>-->
+        <hbox id="buttonsPanel" classNames="buttons-panel">
+            <button id="generateButton" text="Generate"/>
+        </hbox>
+        <dataGrid id="stepsDataGrid" dataContainer="stepsDc" width="100%" height="100%">
+            <columns>
+                <column property="dueDate"/>
+                <column property="completedDate"/>
+                <column property="sortValue"/>
+                <column property="version"/>
+            </columns>
+        </dataGrid>
+        <hbox id="detailActions">
+            <button id="saveAndCloseBtn" action="saveAction"/>
+            <button id="closeBtn" action="closeAction"/>
+        </hbox>
+    </layout>
+</view>
